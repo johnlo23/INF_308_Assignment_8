@@ -91,6 +91,11 @@ class UserList:
     def sort_user_list(self):
         self.user_list.sort(key=lambda name: name['name'])
 
+    # Get list of user names
+    def get_user_list(self):
+        # Get user list with list comprehension
+        return [user['name'] for user in self.user_list]
+
 
 # Class to create a menu with menu numbers
 class PickMenu:
@@ -185,8 +190,8 @@ def menu_action(menu_choice, user_list):
 
 # Function to add a new user
 def add_user(user_list_obj, name):
-    # Check if name is already in the user list - list comprehension
-    if name.lower() in [x['name'].lower() for x in user_list_obj.user_list]:
+    # Check if name is already in the user list
+    if not user_list_obj.find_user(name.lower()) is None:
         # User name already exists
         print('Sorry, that name is already taken.')
     else:
@@ -197,10 +202,10 @@ def add_user(user_list_obj, name):
 # Function to show the user list as a menu and show user details
 def show_user_list(user_list_obj):
     # User List menu details
-    # Get list of user names - list comprehension
-    user_menu_tuple = [x['name'] for x in user_list_obj.user_list]
+    # Get list of user names from user object
+    user_menu_list = user_list_obj.get_user_list()
     user_menu_name = 'User List'
-    user_menu_details = {'title': user_menu_name, 'items': user_menu_tuple}
+    user_menu_details = {'title': user_menu_name, 'items': user_menu_list}
 
     # Create the User List menu object
     user_menu = PickMenu(user_menu_details)
@@ -208,7 +213,7 @@ def show_user_list(user_list_obj):
     # Show the User List menu
     user_menu.show_menu()
 
-    # Get the user menu choice
+    # Get the user menu choice - subtract 1 to match list index
     user_choice = user_menu.get_menu_response() - 1
     print()
 
